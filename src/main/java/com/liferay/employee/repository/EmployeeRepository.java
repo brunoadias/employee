@@ -45,7 +45,6 @@ public class EmployeeRepository {
 
 	public Employee save(Employee employee) {
 		employees.add(employee);
-
 		return employee;
 	}
 

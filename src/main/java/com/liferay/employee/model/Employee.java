@@ -15,19 +15,21 @@
 package com.liferay.employee.model;
 
 import java.io.Serializable;
+import java.text.Collator;
 
 /**
  * An employee.
  * 
  * @author Inácio Nery
  */
-public class Employee implements Serializable {
+public class Employee implements Serializable, Comparable<Employee> {
 
 	private static final long serialVersionUID = 1L;
 
 	private String name;
 
-	public Employee() {}
+	public Employee() {
+	}
 
 	public Employee(String name) {
 		this.name = name;
@@ -42,7 +44,34 @@ public class Employee implements Serializable {
 	}
 
 	@Override
+	public int hashCode() {
+		return this.getName().length() * 7;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if (!(obj instanceof Employee)) {
+			return false;
+		}
+
+		String firstFullName = this.name.replace(" ", "");
+		String anotherFullName = ((Employee) obj).getName().replace(" ", "");
+
+		if (firstFullName.equalsIgnoreCase(anotherFullName)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public String toString() {
 		return "Employee{name='" + name + "}";
+	}
+
+	@Override
+	public int compareTo(Employee o) {
+		return Collator.getInstance().compare(this.name, o.getName());
 	}
 }

@@ -14,6 +14,7 @@
 
 package com.liferay.employee.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -40,8 +41,7 @@ public class EmployeeController {
 
 	private final EmployeeService employeeService;
 
-	private final Logger log =
-		LoggerFactory.getLogger(EmployeeController.class);
+	private final Logger log = LoggerFactory.getLogger(EmployeeController.class);
 
 	public EmployeeController(EmployeeService employeeService) {
 
@@ -55,25 +55,20 @@ public class EmployeeController {
 	 * Creates a new Employee if the name is not already used.
 	 * </p>
 	 *
-	 * @param Employee
-	 *            the Employee to create
+	 * @param Employee the Employee to create
 	 * @return the ResponseEntity with status 200 (OK), or with status 400 (Bad
 	 *         request) if the name is already in use.
 	 */
 	@PostMapping("/v1/employee")
-	public ResponseEntity<String> createEmployee(
-		@RequestBody Employee employee) {
+	public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
 
 		log.debug("REST request to save Employee : {}", employee);
 
 		if (employeeService.exists(employee)) {
 			return ResponseEntity.badRequest().body("Name already in use");
 		}
-
 		employeeService.create(employee);
-
-		return ResponseEntity.status(HttpStatus.CREATED)
-			.body("New Employee created");
+		return ResponseEntity.status(HttpStatus.CREATED).body("New Employee created");
 	}
 
 	/**
@@ -88,7 +83,7 @@ public class EmployeeController {
 		log.debug("REST request all Employees");
 
 		List<Employee> employees = employeeService.findAll();
-
+		Collections.sort(employees);
 		return ResponseEntity.ok(employees);
 	}
 }
